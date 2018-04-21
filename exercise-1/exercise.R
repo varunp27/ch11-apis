@@ -20,13 +20,13 @@ resource <- "/orgs/info201/repos"
 response <- GET(paste0(base_uri, resource))
 
 # Extract the "text" of the response usin the `content` function
-body <- content(response, )
+body <- content(response, "text")
 
 # Convert the body from JSON into a data frame
-
+info_repos <- fromJSON(body)
 
 # How many (public) repositories does the organization have?
-
+print(nrow(info_repos))
 
 ##### New query ######
 
@@ -34,21 +34,23 @@ body <- content(response, )
 # (bonus: limit language to only "R" -- which requires a different syntax)
 # (hint: https://developer.github.com/v3/search/#search-repositories)
 # Reassign the `resource` variable to refer to the appropriate resource.
-
+resource <- '/search/repositories'
 
 # You will need to specify some query parameters. Create a `query_params` list 
 # variable that specifies an appropriate key and value for the search term and
 # the language
-
+query_params <- list(q = "graphics+language:R")
 
 # Send a GET request to this endpoint--including your params list as the `query`
-
+response <- GET(paste0(base_uri, resource), query = query_params)
 
 # Extract the response body and convert it from JSON.
-
+body <- content(response, "text")
+results <- fromJSON(body)
 
 # How many search repos did your search find? (Hint: check the list names)
-
+print(results$total_count)
 
 # What are the full names of the top 5 results?
-
+vis_repo_names <- results$items$full_name[1:5]
+print(vis_repo_names)
